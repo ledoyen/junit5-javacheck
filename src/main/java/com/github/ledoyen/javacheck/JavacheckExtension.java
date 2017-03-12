@@ -1,17 +1,18 @@
 package com.github.ledoyen.javacheck;
 
-import org.junit.jupiter.api.extension.ContainerExtensionContext;
-import org.junit.jupiter.api.extension.Extension;
-import org.junit.jupiter.api.extension.TestTemplateInvocationContext;
-import org.junit.jupiter.api.extension.TestTemplateInvocationContextProvider;
-import org.junit.platform.commons.meta.API;
-
 import java.lang.reflect.Executable;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.extension.ContainerExtensionContext;
+import org.junit.jupiter.api.extension.Extension;
+import org.junit.jupiter.api.extension.TestTemplateInvocationContext;
+import org.junit.jupiter.api.extension.TestTemplateInvocationContextProvider;
+import org.junit.platform.commons.meta.API;
 
 import static java.util.Collections.singletonList;
 import static org.junit.platform.commons.meta.API.Usage.Internal;
@@ -27,7 +28,7 @@ class JavacheckExtension implements TestTemplateInvocationContextProvider {
     }
 
     @Override
-    public Iterator<TestTemplateInvocationContext> provide(ContainerExtensionContext context) {
+    public Stream<TestTemplateInvocationContext> provide(ContainerExtensionContext context) {
         Executable testMethod = context.getTestMethod().get();
 
         Parameter[] parameters = testMethod.getParameters();
@@ -53,7 +54,7 @@ class JavacheckExtension implements TestTemplateInvocationContextProvider {
             contexts.add(buildInvocationContext(parameterContexts, line));
         });
 
-        return contexts.iterator();
+        return contexts.stream();
     }
 
     private TestTemplateInvocationContext buildInvocationContext(List<CheckParameterContext> parameterContexts, List<Object> line) {
@@ -64,7 +65,7 @@ class JavacheckExtension implements TestTemplateInvocationContextProvider {
 
             public List<Extension> getAdditionalExtensions() {
                 List<Extension> extensions = new ArrayList<>();
-                for(int i = 0; i < line.size(); i++) {
+                for (int i = 0; i < line.size(); i++) {
                     extensions.add(new FixedValueParameterResolver(parameterContexts.get(i).getIndex(), line.get(i)));
                 }
                 return extensions;
@@ -79,7 +80,7 @@ class JavacheckExtension implements TestTemplateInvocationContextProvider {
     }
 
     private List<List<Object>> appendMultiplicity(List<List<Object>> matrix, List<List<Object>> elements) {
-        if(elements.size() ==0) {
+        if (elements.size() == 0) {
             return matrix;
         } else {
             List<Object> head = elements.get(0);
@@ -90,8 +91,8 @@ class JavacheckExtension implements TestTemplateInvocationContextProvider {
 
     private List<List<Object>> computeNewMatrix(List<List<Object>> matrix, List<Object> elements) {
         List<List<Object>> newMatrix = new ArrayList<>();
-        for(List<Object> existingItem: matrix) {
-            for(Object element : elements) {
+        for (List<Object> existingItem : matrix) {
+            for (Object element : elements) {
                 List<Object> copy = new ArrayList<>(existingItem);
                 copy.add(element);
                 newMatrix.add(copy);

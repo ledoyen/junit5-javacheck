@@ -3,6 +3,7 @@ package com.github.ledoyen;
 import static org.assertj.core.api.Assertions.*;
 
 import com.github.ledoyen.javacheck.Check;
+import org.junit.jupiter.api.Test;
 
 public class PrimitiveInjectionTest {
 
