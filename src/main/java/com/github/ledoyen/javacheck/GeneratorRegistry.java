@@ -13,21 +13,21 @@ import static org.junit.platform.commons.util.ReflectionUtils.newInstance;
 @API(Internal)
 class GeneratorRegistry {
 
-    private final Set<Generator> generators = new HashSet<>();
+    private final Set<ListGenerator> listGenerators = new HashSet<>();
 
     GeneratorRegistry() {
-        ServiceLoader.load(Generator.class).forEach(generators::add);
+        ServiceLoader.load(ListGenerator.class).forEach(listGenerators::add);
     }
 
     boolean supports(Type type) {
-        return generators.stream().filter(g -> g.supports(type)).findAny().isPresent();
+        return listGenerators.stream().filter(g -> g.supports(type)).findAny().isPresent();
     }
 
-    Generator instanciate(Class<? extends Generator> generatorClass) {
+    ListGenerator instanciate(Class<? extends ListGenerator> generatorClass) {
         return newInstance(generatorClass);
     }
 
-    Generator getForType(Type type) {
-        return generators.stream().filter(g -> g.supports(type)).findFirst().get();
+    ListGenerator getForType(Type type) {
+        return listGenerators.stream().filter(g -> g.supports(type)).findFirst().get();
     }
 }

@@ -15,9 +15,9 @@ import static org.junit.platform.commons.meta.API.Usage.Experimental;
 /**
  * Tag a JUnit 5 test method for value injection, depending on available generators.
  *
- * @see Generator
+ * @see ListGenerator
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @TestTemplate

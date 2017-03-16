@@ -35,4 +35,4 @@ public void absolute_value_should_not_be_negative(@Generated(IntGenerator.class)
 
 **Generators** can be registered using the java `ServiceLoader` mechanism.
 
-Add you custom-made `Generator` in the file `classpath:META-INF/services/com.github.ledoyen.javacheck.Generator` to make in available for all `@Check` marked test method.
+Add you custom-made `Generator` in the file `classpath:META-INF/services/com.github.ledoyen.javacheck.ListGenerator` to make in available for all `@Check` marked test method.

@@ -8,7 +8,7 @@ import static org.junit.platform.commons.meta.API.Usage.Experimental;
 
 /**
  * Mark a JUnit 5 test-method parameter as generated.
- * @see Generator
+ * @see ListGenerator
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
@@ -16,5 +16,5 @@ import static org.junit.platform.commons.meta.API.Usage.Experimental;
 @API(Experimental)
 public @interface Generated {
 
-    Class<? extends Generator> value();
+    Class<? extends ListGenerator> value();
 }

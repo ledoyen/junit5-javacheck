@@ -8,8 +8,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ContainerExtensionContext;
 import org.junit.jupiter.api.extension.Extension;
+import org.junit.jupiter.api.extension.TestExtensionContext;
 import org.junit.jupiter.api.extension.TestTemplateInvocationContext;
 import org.junit.jupiter.api.extension.TestTemplateInvocationContextProvider;
 import org.junit.platform.commons.meta.API;
@@ -18,7 +21,7 @@ import static java.util.Collections.singletonList;
 import static org.junit.platform.commons.meta.API.Usage.Internal;
 
 @API(Internal)
-class JavacheckExtension implements TestTemplateInvocationContextProvider {
+class JavacheckExtension implements TestTemplateInvocationContextProvider, BeforeEachCallback, BeforeTestExecutionCallback {
 
     private GeneratorRegistry generatorRegistry = new GeneratorRegistry();
 
@@ -35,10 +38,16 @@ class JavacheckExtension implements TestTemplateInvocationContextProvider {
         List<CheckParameterContext> parameterContexts = new ArrayList<>();
         for (int i = 0; i < parameters.length; i++) {
             Parameter parameter = parameters[i];
+            final ListGenerator generator;
             if (parameter.isAnnotationPresent(Generated.class)) {
-                parameterContexts.add(new CheckParameterContext(i, parameter, generatorRegistry.instanciate(parameter.getAnnotation(Generated.class).value()).generateValues()));
+                generator = generatorRegistry.instanciate(parameter.getAnnotation(Generated.class).value());
             } else if (generatorRegistry.supports(parameter.getParameterizedType())) {
-                parameterContexts.add(new CheckParameterContext(i, parameter, generatorRegistry.getForType(parameter.getParameterizedType()).generateValues()));
+                generator = generatorRegistry.getForType(parameter.getParameterizedType());
+            } else {
+                generator = null;
+            }
+            if(generator != null) {
+                parameterContexts.add(new CheckParameterContext(i, parameter, ListBuilder.asObjectList(generator.generateValues())));
             }
         }
 
@@ -99,5 +108,15 @@ class JavacheckExtension implements TestTemplateInvocationContextProvider {
             }
         }
         return newMatrix;
+    }
+
+    @Override
+    public void beforeEach(TestExtensionContext context) throws Exception {
+        System.out.println("each: " + context.getDisplayName());
+    }
+
+    @Override
+    public void beforeTestExecution(TestExtensionContext context) throws Exception {
+        System.out.println("test: " + context.getDisplayName());
     }
 }

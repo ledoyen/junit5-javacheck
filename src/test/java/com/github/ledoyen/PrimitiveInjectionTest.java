@@ -1,9 +1,13 @@
 package com.github.ledoyen;
 
+import java.util.stream.Stream;
+
 import static org.assertj.core.api.Assertions.*;
 
 import com.github.ledoyen.javacheck.Check;
-import org.junit.jupiter.api.Test;
+
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 
 public class PrimitiveInjectionTest {
 

@@ -9,7 +9,7 @@ import static org.junit.platform.commons.meta.API.Usage.Experimental;
 
 /**
  * Generate values for a specific {@link Type}.<br/>
- * A {@link Generator} can be declared two ways:
+ * A {@link ListGenerator} can be declared two ways:
  * <ul>
  * <li>by using the {@link Generated @Generated} annotation on a test method parameter</li>
  * <li>by declaring it through the {@link java.util.ServiceLoader} mechanism.
@@ -19,9 +19,9 @@ import static org.junit.platform.commons.meta.API.Usage.Experimental;
  * @see Generated
  */
 @API(Experimental)
-public interface Generator {
+public interface ListGenerator {
 
     boolean supports(Type type);
 
-    List<Object> generateValues();
+    List<?> generateValues();
 }

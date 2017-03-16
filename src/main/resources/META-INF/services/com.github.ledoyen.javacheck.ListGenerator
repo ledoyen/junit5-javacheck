@@ -1,0 +1,5 @@
+com.github.ledoyen.javacheck.generator.BooleanGenerator
+com.github.ledoyen.javacheck.generator.IntGenerator
+com.github.ledoyen.javacheck.generator.LongGenerator
+com.github.ledoyen.javacheck.generator.FloatGenerator
+com.github.ledoyen.javacheck.generator.DoubleGenerator
